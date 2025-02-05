@@ -17,6 +17,8 @@ type RPCRequest struct {
 }
 
 func main() {
+
+	// type the node URL here
 	nodeURL := "<type_node_url>"
 
 	rpcReq := RPCRequest{
