@@ -7,4 +7,5 @@ Example:
 $ go run main.go 
 
 Output:
-{"id":1,"jsonrpc":"2.0","result":"0x14c6399"}
+
+The block number is: 21846612
