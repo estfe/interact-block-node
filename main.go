@@ -19,6 +19,7 @@ type RPCRequest struct {
 	ID      int           `json:"id"`
 }
 
+// creating the response struc
 type RPCResponse struct {
 	ID      int    `json:"id"`
 	JSONRPC string `json:"jsonrpc"`
@@ -30,6 +31,19 @@ func main() {
 	// type the node URL here
 	nodeURL := ""
 
+	response, err := sendPost(nodeURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	block := readResponse(response)
+
+	fmt.Println(block)
+
+}
+
+func sendPost(nodeURL string) ([]byte, error) {
+
 	rpcReq := RPCRequest{
 		JSONRPC: "2.0",
 		Method:  "eth_blockNumber",
@@ -37,7 +51,6 @@ func main() {
 		ID:      1,
 	}
 
-	// transforming struc into bytes
 	requestbody, err := json.Marshal(rpcReq)
 	if err != nil {
 		log.Fatal("Fail to marshal JSON-RPC request", err)
@@ -56,18 +69,28 @@ func main() {
 		log.Fatal("Failed to read response", err)
 	}
 
+	return body, nil
+
+}
+
+func readResponse(body []byte) uint64 {
+
 	// creating the data variable as type RPCResponse
 	var data RPCResponse
 
 	//Extracing the JSON result in data struct
-	err = json.Unmarshal(body, &data)
+	err := json.Unmarshal(body, &data)
+	if err != nil {
+		log.Fatal("fatal err:", err)
+	}
 
 	//Extract and process the "result" field
 	hexBlockNumber := data.Result
 	cleanHex := strings.TrimPrefix(hexBlockNumber, "0x")
 
 	//Printing the block number in decimals
-	blockNumer, err := strconv.ParseUint(cleanHex, 16, 64)
-	fmt.Println("The block number is:", blockNumer)
+	blockNumber, err := strconv.ParseUint(cleanHex, 16, 64)
+
+	return blockNumber
 
 }
