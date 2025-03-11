@@ -30,7 +30,7 @@ type RPCResponse struct {
 func main() {
 
 	// type the node URL here
-	nodeURL := "https://rpc.ankr.com/eth"
+	nodeURL := ""
 
 	response, err := sendPost(nodeURL)
 	if err != nil {
