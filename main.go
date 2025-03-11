@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // creating the JSON struct
@@ -29,7 +30,7 @@ type RPCResponse struct {
 func main() {
 
 	// type the node URL here
-	nodeURL := ""
+	nodeURL := "https://rpc.ankr.com/eth"
 
 	response, err := sendPost(nodeURL)
 	if err != nil {
@@ -38,7 +39,13 @@ func main() {
 
 	block := readResponse(response)
 
-	fmt.Println(block)
+	ticker := time.NewTicker(5 * time.Minute)
+	defer ticker.Stop()
+
+	for {
+		fmt.Println(block)
+		<-ticker.C
+	}
 
 }
 
